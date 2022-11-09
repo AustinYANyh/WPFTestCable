@@ -35,8 +35,7 @@
             
             <GroupBox Grid.Column="0" Header="Sheet页">
                 <ListBox ItemContainerStyle="{DynamicResource ListBoxItemContainerStyle}" ItemsSource="{Binding SheetData}" Style="{StaticResource ListBoxStyle}" Background="Transparent">
-                    <!-- <CheckBox Content="电力电缆表" Margin="0,10,0,0"></CheckBox> -->
-                    <!-- <CheckBox Content="电缆标注" Margin="0,10,0,0"></CheckBox> -->
+                    
                 </ListBox>
             </GroupBox>
             

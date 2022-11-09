@@ -18,8 +18,8 @@
         </Grid.RowDefinitions>
         
         <Grid Grid.Row="0">
-            <Button x:Name="ExportFromExcelBtn" Width="150" Height="35" HorizontalAlignment="Left" local:GlobalProperty.ImageSource="a.png" Margin="0,0,0,0" Content="导入清册" Click="ExportFromExcelBtnOnClick" Style="{StaticResource ImageButtonStyle}"></Button>
-            <Button x:Name="AddColumnBtn" Width="150" Height="35" HorizontalAlignment="Right" Content="增加列" Click="AddColumnBtn_OnClick"></Button>
+            <Button x:Name="ExportFromExcelBtn" Width="150" Height="35" HorizontalAlignment="Left" local:GlobalProperty.ImageSource="excelicon.png" Margin="0,0,0,0" Content="导入清册" Click="ExportFromExcelBtnOnClick" Style="{StaticResource ImageButtonStyle}"></Button>
+            <!-- <Button x:Name="AddColumnBtn" Width="150" Height="35" HorizontalAlignment="Right" Content="增加列" Click="AddColumnBtn_OnClick"></Button> -->
         </Grid>
         <Grid Grid.Row="1">
             <DataGrid x:Name="ExportResultDataGrid" CanUserAddRows="False" CanUserSortColumns="False" AutoGenerateColumns="False" ItemsSource="{Binding DataInfos}" HorizontalScrollBarVisibility="Auto" PreviewMouseRightButtonDown="ExportResultDataGrid_OnPreviewMouseRightButtonDown">

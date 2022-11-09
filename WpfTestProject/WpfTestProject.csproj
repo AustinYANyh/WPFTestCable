@@ -115,9 +115,7 @@
         <None Include="App.config" />
     </ItemGroup>
     <ItemGroup>
-      <Content Include="CableReport\Window\a.png">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Content>
+      <Content Include="CableReport\Window\excelicon.png" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
