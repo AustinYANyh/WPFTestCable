@@ -1,0 +1,67 @@
+﻿<Window x:Class="WpfTestProject.CableReport.Window.ExportMain"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:HW.JD.CableReport"
+        xmlns:cableReport="clr-namespace:WpfTestProject.CableReport"
+        xmlns:userControl="clr-namespace:WpfTestProject.CableReport.UserControl"
+        mc:Ignorable="d"
+        Title="电缆清册" Height="496" Width="695" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+       <ResourceDictionary Source="../Style/ExportMainStyle.xaml"></ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0">
+            <Button x:Name="ExportFromExcelBtn" Width="150" Height="35" HorizontalAlignment="Left" local:GlobalProperty.ImageSource="a.png" Margin="0,0,0,0" Content="导入清册" Click="ExportFromExcelBtnOnClick" Style="{StaticResource ImageButtonStyle}"></Button>
+            <Button x:Name="AddColumnBtn" Width="150" Height="35" HorizontalAlignment="Right" Content="增加列" Click="AddColumnBtn_OnClick"></Button>
+        </Grid>
+        <Grid Grid.Row="1">
+            <DataGrid x:Name="ExportResultDataGrid" CanUserSortColumns="False" AutoGenerateColumns="False" ItemsSource="{Binding DataInfos}" HorizontalScrollBarVisibility="Auto">
+                <DataGrid.Columns>
+                     <DataGridTextColumn x:Name="NumberColumn" Header="序号" Width="*" Binding="{Binding Number,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
+                     <DataGridTextColumn x:Name="OrderColumn" Width="*" Binding="{Binding CableNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"> 
+                         <DataGridTextColumn.Header> 
+                            <userControl:TextBlockWithRedStar Header="电缆编号" local:GlobalProperty.DataType="CableNumber"></userControl:TextBlockWithRedStar> 
+                         </DataGridTextColumn.Header> 
+                     </DataGridTextColumn> 
+                     <DataGridTextColumn x:Name="InfoColumn" Width="*" Binding="{Binding CableInfo,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                         <DataGridTextColumn.Header>
+                             <userControl:TextBlockWithRedStar Header="电缆型号" local:GlobalProperty.DataType="CableInfo"></userControl:TextBlockWithRedStar>
+                         </DataGridTextColumn.Header>
+                     </DataGridTextColumn>
+                     <DataGridTextColumn x:Name="SizeColumn" Width="*" Binding="{Binding CableSize,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                         <DataGridTextColumn.Header>
+                             <userControl:TextBlockWithRedStar Header="电缆规格" local:GlobalProperty.DataType="CableSize"></userControl:TextBlockWithRedStar>
+                         </DataGridTextColumn.Header>
+                     </DataGridTextColumn>
+                     <DataGridTextColumn x:Name="StartNameColumn" Width="*" Binding="{Binding StartPointName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                         <DataGridTextColumn.Header>
+                             <userControl:TextBlockWithRedStar Header="起点名称" local:GlobalProperty.DataType="StartPointName"></userControl:TextBlockWithRedStar>
+                         </DataGridTextColumn.Header>
+                     </DataGridTextColumn>
+                     <DataGridTextColumn x:Name="StartNumberColumn" Width="*" Binding="{Binding StartPointNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                         <DataGridTextColumn.Header>
+                            <TextBox Text="起点编号" Style="{StaticResource EditHeaderStyle}" local:GlobalProperty.DataType="StartPointNumber"></TextBox>
+                         </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                     <DataGridTextColumn x:Name="EndNameColumn" Width="*" Binding="{Binding EndPointName,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                         <DataGridTextColumn.Header>
+                             <userControl:TextBlockWithRedStar Header="终点名称" local:GlobalProperty.DataType="EndPointName"></userControl:TextBlockWithRedStar>
+                         </DataGridTextColumn.Header>
+                     </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="EndNumberColumn" Width="*" Binding="{Binding EndPointNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
+                        <DataGridTextColumn.Header>
+                            <TextBox Text="终点编号" Style="{StaticResource EditHeaderStyle}" local:GlobalProperty.DataType="EndPointNumber"></TextBox>
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</Window>
