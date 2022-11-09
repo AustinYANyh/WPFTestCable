@@ -14,8 +14,10 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using HW.JD.CableReport;
 using HW.JD.CableReport.Model;
+using HW.JD.CableReport.ZHelper;
 using WpfTestProject.CableReport.UserControl;
 
 namespace WpfTestProject.CableReport.Window
@@ -46,18 +48,12 @@ namespace WpfTestProject.CableReport.Window
         private void ExportFromExcelBtnOnClick(object sender, RoutedEventArgs e)
         {
             List<DataGridInfo> infos = new List<DataGridInfo>();
-            foreach (DataGridColumn dataGridColumn in ExportResultDataGrid.Columns.ToList().OrderBy(x=>x.DisplayIndex))
+            IOrderedEnumerable<DataGridColumn> dataGridColumns = ExportResultDataGrid.Columns.ToList().Where(x=>x.Visibility == Visibility.Visible).OrderBy(x=>x.DisplayIndex);
+            foreach (DataGridColumn dataGridColumn in dataGridColumns)
             {
                 if (dataGridColumn.Header is string headStr)
                 {
-                    string titleName = "起始行";
-                    InfoType infoType = InfoType.None;
-                    if (infos.Exists(x => x.TitleName.Equals(titleName)))
-                    {
-                        titleName = "新增列";
-                        infoType = InfoType.NewCol;
-                    }
-                    infos.Add(new DataGridInfo(){TitleName = titleName,IsNeedRedStar = false,ExcelIndex = 0,DataType = infoType});
+                    infos.Add(new DataGridInfo(){TitleName = "起始行",IsNeedRedStar = false,ExcelIndex = 0,DataType = InfoType.None});
                 }
                 else if (dataGridColumn.Header is TextBox textBox)
                 {
@@ -84,11 +80,21 @@ namespace WpfTestProject.CableReport.Window
         /// <param name="e"></param>
         private void AddColumnBtn_OnClick(object sender, RoutedEventArgs e)
         {
-            int newColumnIndex = DataInfos.First().NewColumnIndex + 1;
-            DataGridTextColumn column = new DataGridTextColumn(){Header = "新增列",Binding = new Binding($"NewColumnData[{newColumnIndex}]")};
-            ExportResultDataGrid.Columns.Add(column);
+            // int newColumnIndex = DataInfos.First().NewColumnIndex + 1;
+            // DataGridTextColumn column = new DataGridTextColumn(){Header = "新增列",Binding = new Binding($"NewColumnData[{newColumnIndex}]")};
+            // ExportResultDataGrid.Columns.Add(column);
+            //
+            // DataInfos.First().NewColumnIndex += 1;
+        }
 
-            DataInfos.First().NewColumnIndex += 1;
+        private void ExportResultDataGrid_OnPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Point Pmouser = e.GetPosition((ItemsControl)sender);
+
+            if (Pmouser.Y <= 30)
+            {
+                new DataGridHelper(this.ExportResultDataGrid).AddCheckBox();
+            }
         }
     }
 }

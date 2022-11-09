@@ -19,6 +19,7 @@ using System.Windows.Input;
 using HW.JD.CableReport.Model;
 using HW.JD.CableReport.ZHelper;
 using Microsoft.Office.Interop.Excel;
+using Microsoft.Practices.Prism;
 
 namespace WpfTestProject.CableReport.Window
 {
@@ -46,7 +47,9 @@ namespace WpfTestProject.CableReport.Window
             foreach (DataGridInfo dataGridInfo in DataGridData)
             {
                 dataGridInfo.ExcelIndex = 0;
-                dataGridInfo.ExcelColumns = new List<string>(ExcelHelper.GetColumnNames());
+                dataGridInfo.ExcelColumns.Clear();
+                dataGridInfo.ExcelColumns.AddRange(ExcelHelper.GetColumnNames());
+                dataGridInfo.UpdateDisPlayCol();
             }
         }
 
@@ -110,15 +113,7 @@ namespace WpfTestProject.CableReport.Window
 
                             //列数据有误
                             if (string.IsNullOrEmpty(resultStr)) continue;
-
-                            //新增列添加到集合中
-                            if (dataGridInfo.DataType == InfoType.NewCol)
-                            {
-                                resultInfo.NewColumnData.Add(resultStr);
-                                resultInfo.NewColumnIndex += 1;
-                                continue;
-                            }
-
+                            
                             if (dataGridInfo.DataType == InfoType.CableInfo) resultInfo.CableInfo = resultStr;
                             if (dataGridInfo.DataType == InfoType.CableNumber) resultInfo.CableNumber = resultStr;
                             if (dataGridInfo.DataType == InfoType.CableSize) resultInfo.CableSize = resultStr;
@@ -126,6 +121,16 @@ namespace WpfTestProject.CableReport.Window
                             if (dataGridInfo.DataType == InfoType.EndPointName) resultInfo.EndPointName = resultStr;
                             if (dataGridInfo.DataType == InfoType.StartPointNumber) resultInfo.StartPointNumber = resultStr;
                             if (dataGridInfo.DataType == InfoType.EndPointNumber) resultInfo.EndPointNumber = resultStr;
+                            
+                            //新增列
+                            if (dataGridInfo.DataType == InfoType.NewCol1) resultInfo.NewCol1 = resultStr;
+                            if (dataGridInfo.DataType == InfoType.NewCol2) resultInfo.NewCol2 = resultStr;
+                            if (dataGridInfo.DataType == InfoType.NewCol3) resultInfo.NewCol3 = resultStr;
+                            if (dataGridInfo.DataType == InfoType.NewCol4) resultInfo.NewCol4 = resultStr;
+                            if (dataGridInfo.DataType == InfoType.NewCol5) resultInfo.NewCol5 = resultStr;
+                            if (dataGridInfo.DataType == InfoType.NewCol6) resultInfo.NewCol6 = resultStr;
+                            if (dataGridInfo.DataType == InfoType.NewCol7) resultInfo.NewCol7 = resultStr;
+                            if (dataGridInfo.DataType == InfoType.NewCol8) resultInfo.NewCol8 = resultStr;
                         }
 
                         ExportResult.Add(resultInfo);

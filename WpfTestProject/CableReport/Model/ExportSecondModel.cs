@@ -8,6 +8,7 @@
 // ==============================================================================================
 
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using WpfTestProject.CableReport.Window;
 
@@ -16,7 +17,6 @@ namespace HW.JD.CableReport.Model
     public enum InfoType
     {
         None=0,
-        NewCol,
         Number,
         CableNumber,
         CableInfo,
@@ -25,6 +25,16 @@ namespace HW.JD.CableReport.Model
         EndPointName,
         StartPointNumber,
         EndPointNumber,
+        
+        //以下都是新增列
+        NewCol1,
+        NewCol2,
+        NewCol3,
+        NewCol4,
+        NewCol5,
+        NewCol6,
+        NewCol7,
+        NewCol8
     }
     public class DataGridInfo:NotifyBase
     {
@@ -64,33 +74,36 @@ namespace HW.JD.CableReport.Model
             {
                 excelIndex = value;
                 OnPropertyChanged(nameof(ExcelIndex));
-                OnPropertyChanged(nameof(DisplayCol));
             }
         }
-        
-        private string displayCol;
+
+        private string displayCol => ExcelColumns.ElementAt(ExcelIndex);
 
         public string DisplayCol
         {
             get
             {
-                if (ExcelIndex == -1 || ExcelIndex > ExcelColumns.Count) return "Out Of Range";
+                if (ExcelIndex == -1 && ExcelColumns.Count > 0) ExcelIndex = 0;
                 return ExcelColumns.ElementAt(ExcelIndex);
             }
             set {  }
         }
 
-        private List<string> excelColumns = new List<string>();
+        private ObservableCollection<string> excelColumns = new ObservableCollection<string>();
 
-        public List<string> ExcelColumns
+        public ObservableCollection<string> ExcelColumns
         {
             get => excelColumns;
             set
             {
                 excelColumns = value;
                 OnPropertyChanged(nameof(ExcelColumns));
-                OnPropertyChanged(nameof(DisplayCol));
             }
+        }
+
+        public void UpdateDisPlayCol()
+        {
+            OnPropertyChanged(nameof(DisplayCol));
         }
     }
 

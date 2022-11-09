@@ -22,7 +22,7 @@
             <Button x:Name="AddColumnBtn" Width="150" Height="35" HorizontalAlignment="Right" Content="增加列" Click="AddColumnBtn_OnClick"></Button>
         </Grid>
         <Grid Grid.Row="1">
-            <DataGrid x:Name="ExportResultDataGrid" CanUserSortColumns="False" AutoGenerateColumns="False" ItemsSource="{Binding DataInfos}" HorizontalScrollBarVisibility="Auto">
+            <DataGrid x:Name="ExportResultDataGrid" CanUserAddRows="False" CanUserSortColumns="False" AutoGenerateColumns="False" ItemsSource="{Binding DataInfos}" HorizontalScrollBarVisibility="Auto" PreviewMouseRightButtonDown="ExportResultDataGrid_OnPreviewMouseRightButtonDown">
                 <DataGrid.Columns>
                      <DataGridTextColumn x:Name="NumberColumn" Header="序号" Width="*" Binding="{Binding Number,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
                      <DataGridTextColumn x:Name="OrderColumn" Width="*" Binding="{Binding CableNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"> 
@@ -58,6 +58,49 @@
                     <DataGridTextColumn x:Name="EndNumberColumn" Width="*" Binding="{Binding EndPointNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}">
                         <DataGridTextColumn.Header>
                             <TextBox Text="终点编号" Style="{StaticResource EditHeaderStyle}" local:GlobalProperty.DataType="EndPointNumber"></TextBox>
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    
+                    
+                    <!-- 以下所有，都是新增列，一般是不对外显示的，需要手动勾选，是新增列的人性化实现 -->
+                    <DataGridTextColumn x:Name="NewCol1" Width="*" Binding="{Binding NewCol1,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed">
+                        <DataGridTextColumn.Header>
+                            <TextBox Text="新增列1" Style="{StaticResource EditHeaderStyle}" local:GlobalProperty.DataType="NewCol1"></TextBox>
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="NewCol2" Width="*" Binding="{Binding NewCol2,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed">
+                        <DataGridTextColumn.Header>
+                            <TextBox Text="新增列2" Style="{StaticResource EditHeaderStyle}" local:GlobalProperty.DataType="NewCol2"></TextBox>
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="NewCol3" Width="*" Binding="{Binding NewCol3,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed">
+                        <DataGridTextColumn.Header>
+                            <TextBox Text="新增列3" Style="{StaticResource EditHeaderStyle}" local:GlobalProperty.DataType="NewCol3"></TextBox>
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="NewCol4" Width="*" Binding="{Binding NewCol4,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed">
+                        <DataGridTextColumn.Header>
+                            <TextBox Text="新增列4" Style="{StaticResource EditHeaderStyle}" local:GlobalProperty.DataType="NewCol4"></TextBox>
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="NewCol5" Width="*" Binding="{Binding NewCol5,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed">
+                        <DataGridTextColumn.Header>
+                            <TextBox Text="新增列5" Style="{StaticResource EditHeaderStyle}" local:GlobalProperty.DataType="NewCol5"></TextBox>
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="NewCol6" Width="*" Binding="{Binding NewCol6,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed">
+                        <DataGridTextColumn.Header>
+                            <TextBox Text="新增列6" Style="{StaticResource EditHeaderStyle}" local:GlobalProperty.DataType="NewCol6"></TextBox>
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="NewCol7" Width="*" Binding="{Binding NewCol7,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed">
+                        <DataGridTextColumn.Header>
+                            <TextBox Text="新增列7" Style="{StaticResource EditHeaderStyle}" local:GlobalProperty.DataType="NewCol7"></TextBox>
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn x:Name="NewCol8" Width="*" Binding="{Binding NewCol8,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Visibility="Collapsed">
+                        <DataGridTextColumn.Header>
+                            <TextBox Text="新增列8" Style="{StaticResource EditHeaderStyle}" local:GlobalProperty.DataType="NewCol8"></TextBox>
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                 </DataGrid.Columns>

@@ -60,4 +60,25 @@ namespace WpfTestProject.CableReport.UserControl
             throw new NotImplementedException();
         }
     }
+    
+    public class VisibilityToBoolConvertor:IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is Visibility visibilityValue)
+            {
+                return visibilityValue == Visibility.Visible ?  true: false;
+            }
+            return DependencyProperty.UnsetValue;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value is bool boolValue)
+            {
+                return boolValue == true ? Visibility.Visible : Visibility.Collapsed;
+            }
+            return DependencyProperty.UnsetValue;
+        }
+    }
 }

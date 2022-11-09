@@ -90,6 +90,7 @@
         <Compile Include="CableReport\Window\ExportSecond.xaml.cs">
           <DependentUpon>ExportSecond.xaml</DependentUpon>
         </Compile>
+        <Compile Include="CableReport\ZHelper\DataGridHelper.cs" />
         <Compile Include="CableReport\ZHelper\ExcelHelper.cs" />
         <Compile Include="MainWindow.xaml.cs">
             <DependentUpon>MainWindow.xaml</DependentUpon>
