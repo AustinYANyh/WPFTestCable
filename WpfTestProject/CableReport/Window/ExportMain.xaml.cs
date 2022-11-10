@@ -13,28 +13,34 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media;
 using HW.JD.CableReport;
 using HW.JD.CableReport.Model;
 using HW.JD.CableReport.ZHelper;
 using WpfTestProject.CableReport.UserControl;
+using CheckBox = System.Windows.Controls.CheckBox;
+using DataGrid = System.Windows.Controls.DataGrid;
 
 namespace WpfTestProject.CableReport.Window
 {
     public partial class ExportMain : System.Windows.Window
     {
+        private Popup headerPopup;
+        private Popup rowPopup;
+
+        private readonly Action<int> AddRowToDataGridAction;
+        private readonly Action<int> RemoveRowFromDataGridAction;
+
         public ExportMain()
         {
             InitializeComponent();
-            
-            DataInfos = new ObservableCollection<ExportDataGridInfo>
-            {
-                new ExportDataGridInfo(){Number = "1",CableNumber = "xx", CableInfo = "123", CableSize = "xx-xx-yy", EndPointNumber = "999", EndPointName = "End", StartPointNumber = "111",StartPointName = "Start"},
-                new ExportDataGridInfo(){Number = "2",CableNumber = "YY", CableInfo = "123", CableSize = "xx-xx-yy", EndPointNumber = "999", EndPointName = "End", StartPointNumber = "111",StartPointName = "Start"},
-                new ExportDataGridInfo(){Number = "3",CableNumber = "ZZ", CableInfo = "123", CableSize = "xx-xx-yy", EndPointNumber = "999", EndPointName = "End", StartPointNumber = "111",StartPointName = "Start"},
-                new ExportDataGridInfo(){Number = "4",CableNumber = "aa", CableInfo = "123", CableSize = "xx-xx-yy", EndPointNumber = "999", EndPointName = "End", StartPointNumber = "111",StartPointName = "Start"},
-            };
+
+            AddRowToDataGridAction = new Action<int>(AddRowToDataGrid);
+            RemoveRowFromDataGridAction = new Action<int>(RemoveRowFromDataGrid);
+
             this.DataContext = this;
         }
 
@@ -64,6 +70,9 @@ namespace WpfTestProject.CableReport.Window
                     infos.Add(new DataGridInfo() { TitleName = textBlockWithRedStar.Header, IsNeedRedStar = true, ExcelIndex = 0 ,DataType = GlobalProperty.GetDataType(textBlockWithRedStar)});
                 }
             }
+            SetPopupIsOpen(headerPopup, false);
+            SetPopupIsOpen(rowPopup, false);
+            
             ExportSecond second = new ExportSecond(infos);
             second.Owner = this;
             second.ShowDialog();
@@ -73,27 +82,110 @@ namespace WpfTestProject.CableReport.Window
             exportResult.ForEach(x=>DataInfos.Add(x));
         }
 
-        /// <summary>
-        /// 增加列
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void AddColumnBtn_OnClick(object sender, RoutedEventArgs e)
+        private void ExportResultDataGrid_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            // int newColumnIndex = DataInfos.First().NewColumnIndex + 1;
-            // DataGridTextColumn column = new DataGridTextColumn(){Header = "新增列",Binding = new Binding($"NewColumnData[{newColumnIndex}]")};
-            // ExportResultDataGrid.Columns.Add(column);
-            //
-            // DataInfos.First().NewColumnIndex += 1;
+            //var target = GetCurControlFromDataGrid(e);
+            //e.Handled = true;
+            SetPopupIsOpen(headerPopup, false);
+            SetPopupIsOpen(rowPopup, false);
+        }
+
+        private void SetPopupIsOpen(Popup popup,bool isOpen)
+        {
+            if (popup != null)
+            {
+                if (popup.IsOpen == isOpen)
+                {
+                    popup.IsOpen = !isOpen;
+                    popup.IsOpen = isOpen;
+                }
+                else popup.IsOpen = isOpen;
+            }
         }
 
         private void ExportResultDataGrid_OnPreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Point Pmouser = e.GetPosition((ItemsControl)sender);
-
-            if (Pmouser.Y <= 30)
+            var target = GetCurControlFromDataGrid(e);
+            e.Handled = true;
+            if (target is DataGridColumnHeader header)
             {
-                new DataGridHelper(this.ExportResultDataGrid).AddCheckBox();
+                if(headerPopup == null) headerPopup = new DataGridHelper(this.ExportResultDataGrid).GetHeaderPopup();
+                SetPopupIsOpen(headerPopup, true);
+                SetPopupIsOpen(rowPopup, false);
+            }
+            else if (target is DataGridRow row)
+            {
+                if (rowPopup == null) rowPopup = new DataGridHelper(this.ExportResultDataGrid).GetRowPopup(AddRowToDataGridAction,RemoveRowFromDataGridAction);
+                int index = Convert.ToInt32(((ExportDataGridInfo)row.DataContext).Number) - 1;
+                    
+                foreach (Button btn in ((ListBox)rowPopup.Child).Items)
+                {
+                    if (btn is RowAddButton rowAddBtn) rowAddBtn.RowIndex = index;
+                    if (btn is RowDelButton rowDelBtn) rowDelBtn.RowIndex = index;
+                }
+                SetPopupIsOpen(rowPopup, true);
+                SetPopupIsOpen(headerPopup, false);
+            }
+            else
+            {
+                SetPopupIsOpen(headerPopup, false);
+            }
+        }
+
+
+        private void AddRowToDataGrid(int index)
+        {
+            DataInfos.Insert(index+1,new ExportDataGridInfo());
+            UpdateDataInfoNumber();
+            SetPopupIsOpen(rowPopup, false);
+        }
+
+        private void RemoveRowFromDataGrid(int index)
+        {
+            DataInfos.RemoveAt(index);
+            UpdateDataInfoNumber();
+            SetPopupIsOpen(rowPopup, false);
+        }
+
+        private void UpdateDataInfoNumber()
+        {
+            for (var i = 0; i < DataInfos.Count; i++)
+            {
+                DataInfos[i].Number = (i + 1).ToString();
+            }
+        }
+
+
+        private DependencyObject GetCurControlFromDataGrid(MouseButtonEventArgs e)
+        {
+            System.Windows.Point aP = e.GetPosition(ExportResultDataGrid);
+            IInputElement obj = ExportResultDataGrid.InputHitTest(aP);
+            DependencyObject target = obj as DependencyObject;
+            
+            while (target != null)
+            {
+                if (target is DataGridRow) break;
+
+                if (target is DataGridColumnHeader)break;
+
+                target = VisualTreeHelper.GetParent(target);
+            }
+
+            return target;
+        }
+
+        private void ExportMain_OnUnloaded(object sender, RoutedEventArgs e)
+        {
+            if (rowPopup != null)
+            {
+                rowPopup.IsOpen = false;
+                rowPopup = null;
+            }
+
+            if (headerPopup != null)
+            {
+                headerPopup.IsOpen = false;
+                headerPopup = null;
             }
         }
     }

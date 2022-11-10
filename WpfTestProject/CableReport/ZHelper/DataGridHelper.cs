@@ -7,8 +7,10 @@
 // *   描    述：
 // ==============================================================================================
 
+using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using WpfTestProject.CableReport.UserControl;
 
@@ -23,16 +25,20 @@ namespace HW.JD.CableReport.ZHelper
             get => alwaysTrue;
             set => alwaysTrue = true;
         }
-        
+
+        private RowAddButton addRowBtn = null; 
+        private RowDelButton removeRowBtn = null;
+
         private readonly DataGrid dataGrid;
         public DataGridHelper(DataGrid dataGrid)
         {
             this.dataGrid = dataGrid;
         }
         
-        public void AddCheckBox()
+        public Popup GetHeaderPopup()
         {
-            ContextMenu menu = new ContextMenu();
+            Popup popup = new Popup();
+            ListBox listBx = new ListBox();
             foreach (DataGridColumn dataGridColumn in dataGrid.Columns)
             {
                 var header = GetHeaderFromColumn(dataGridColumn,out bool redStar);
@@ -48,11 +54,38 @@ namespace HW.JD.CableReport.ZHelper
                 {
                     SetBindingForCheckBox(dataGridColumn, checkBox);
                 }
-                menu.Items.Add(checkBox);
+
+                listBx.Items.Add(checkBox);
             }
-            dataGrid.ContextMenu = menu;
+            popup.Placement = PlacementMode.Mouse;
+            popup.IsOpen = true;
+            popup.Child = listBx;
+
+            return popup;
         }
 
+        public Popup GetRowPopup(Action<int> addAction, Action<int> removeAction)
+        {
+            Popup popup = new Popup();
+            ListBox listBx = new ListBox();
+
+            if (addRowBtn == null && removeRowBtn == null)
+            {
+                addRowBtn = new RowAddButton(addAction) { Content = "新增行" };
+                removeRowBtn = new RowDelButton(removeAction) { Content = "移除行" };
+            }
+
+            listBx.Items.Add(addRowBtn);
+            listBx.Items.Add(removeRowBtn);
+
+            popup.Placement = PlacementMode.Mouse;
+            popup.IsOpen = true;
+            popup.Child = listBx;
+
+            return popup;
+        }
+
+       
         private string GetHeaderFromColumn(DataGridColumn dataGridColumn,out bool redStar)
         {
             redStar = false;
@@ -81,6 +114,38 @@ namespace HW.JD.CableReport.ZHelper
                 Source = dataGridColumn,
                 Converter = new VisibilityToBoolConvertor()
             });
+        }
+    }
+
+    public class RowAddButton : Button
+    {
+        public int RowIndex = -1;
+        private readonly Action<int> addAction;
+
+        public RowAddButton(Action<int> addAction)
+        {
+            this.addAction = addAction;
+        }
+        protected override void OnClick()
+        {
+            if (RowIndex == -1) return;
+            addAction(RowIndex);
+        }
+    }
+    public class RowDelButton : Button
+    {
+        public int RowIndex = -1;
+        private readonly Action<int> removeAction;
+
+        public RowDelButton(Action<int> removeAction)
+        {
+            this.removeAction = removeAction;
+        }
+
+        protected override void OnClick()
+        {
+            if (RowIndex == -1) return;
+            removeAction(RowIndex);
         }
     }
 }
