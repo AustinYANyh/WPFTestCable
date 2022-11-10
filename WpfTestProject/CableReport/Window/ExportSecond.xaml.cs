@@ -15,6 +15,7 @@ using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using HW.JD.CableReport.Model;
 using HW.JD.CableReport.ZHelper;
@@ -25,6 +26,7 @@ namespace WpfTestProject.CableReport.Window
 {
     public partial class ExportSecond : System.Windows.Window
     {
+        private bool enableCheckEmpty = false;
         public ExcelHelper ExcelHelper { get; set; }= new ExcelHelper();
         public ExportSecond(List<DataGridInfo> infos)
         {
@@ -38,8 +40,9 @@ namespace WpfTestProject.CableReport.Window
 
         private void UpdateExcelColumnInDataGrid()
         {
+            enableCheckEmpty = false;
             StartColumns = new List<string>();
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < ExcelHelper.GetExcelRowsCount(); i++)
             {
                 StartColumns.Add((i+1).ToString());
             }
@@ -48,10 +51,10 @@ namespace WpfTestProject.CableReport.Window
                 var dataGridInfo = DataGridData[i];
                 dataGridInfo.ExcelIndex = 0;
                 dataGridInfo.ExcelColumns.Clear();
-
-                dataGridInfo.ExcelColumns.AddRange(i == 0 ? StartColumns : ExcelHelper.GetColumnNames());
+                dataGridInfo.ExcelColumns.AddRange(i == 0 ? StartColumns : ExcelHelper.GetColumnNames(dataGridInfo.IsNeedRedStar));
                 dataGridInfo.UpdateDisPlayCol();
             }
+            enableCheckEmpty = true;
         }
 
         private List<string> StartColumns = new List<string>();
@@ -66,6 +69,8 @@ namespace WpfTestProject.CableReport.Window
         private void ExportBtnOnClick(object sender, RoutedEventArgs e)
         {
             if(!ExcelHelper.GetExcelData())return;
+
+            System.Diagnostics.Process.Start(ExcelHelper.FilePath);
             
             SheetData.Clear();
             foreach (string workSheetName in ExcelHelper.GetWorkSheetNames())
@@ -74,9 +79,15 @@ namespace WpfTestProject.CableReport.Window
             }
             UpdateExcelColumnInDataGrid();
         }
-
+        
         private void ExportToMainBtnOnClick(object sender, RoutedEventArgs e)
         {
+            if (ExcelHelper.IsFileLocked(ExcelHelper.FilePath))
+            {
+                MessageBox.Show("检测到该Excel文件已在外部打开，请关闭再导入信息！");
+                return;
+            }
+
             if (!SheetData.Any(x => x.IsChecked))
             {
                 MessageBox.Show("不选工作簿是导不了的");
@@ -105,10 +116,10 @@ namespace WpfTestProject.CableReport.Window
                             //起始行开始读取
                             if (dataGridInfo.DataType == InfoType.StartReadFromThisNumber)
                             {
-                                if (i + 1 < Convert.ToInt32(dataGridInfo.DisplayCol)) break;
+                                if (i + 2 < Convert.ToInt32(dataGridInfo.DisplayCol)) break;
                             }
-                            //没有这一列
-                            if (!data.ColumnNames.Contains(dataGridInfo.DisplayCol) || dataGridInfo.DataType == InfoType.None)
+                            //没有这一列或者选择不填入数据
+                            if (!data.ColumnNames.Contains(dataGridInfo.DisplayCol) || dataGridInfo.DisplayCol.Equals(string.Empty) || dataGridInfo.DataType == InfoType.None)
                             {
                                 continue;
                             }
@@ -141,6 +152,17 @@ namespace WpfTestProject.CableReport.Window
                 }
             }
             this.Close();
+        }
+
+        private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (sender is ComboBox comboBox && comboBox.DataContext is DataGridInfo dataContext && enableCheckEmpty)
+            {
+                if (dataContext.IsNeedRedStar && dataContext.DisplayCol.Equals(String.Empty))
+                {
+                    MessageBox.Show("带*号标题内容不允许为空！");
+                }
+            }
         }
     }
 }

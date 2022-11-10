@@ -39,12 +39,50 @@ namespace HW.JD.CableReport.ZHelper
         private List<string> ColumnNames = new List<string>();
         private List<string> workSheetNames { get; set; } = new List<string>();
 
-        public List<string> GetColumnNames() => ColumnNames;
+        public List<string> GetColumnNames(bool isNeedRedStar = false)
+        { 
+            List<string> result = new List<string>(ColumnNames);
+            if(!isNeedRedStar) result.Insert(0,string.Empty);
+            return result;
+        } 
         public List<string> GetWorkSheetNames() => workSheetNames;
 
         private Dictionary<string, List<ExcelData>> data = new Dictionary<string, List<ExcelData>>();
 
         public Dictionary<string, List<ExcelData>> GetData() => data;
+
+        public int GetExcelRowsCount()
+        {
+            int count = 0;
+            foreach (KeyValuePair<string,List<ExcelData>> keyValuePair in data)
+            {
+                foreach (ExcelData excelData in keyValuePair.Value)
+                {
+                    count += excelData.DataRows.Count;
+                }
+            }
+            return count;
+        }
+        
+        public bool IsFileLocked(string pathName)
+        {
+            try
+            {
+                if (!System.IO.File.Exists(pathName))
+                {
+                    return false;
+                }
+                using (var fs = new System.IO.FileStream(pathName, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.None))
+                {
+                    fs.Close();
+                }
+            }
+            catch
+            {
+                return true;
+            }
+            return false;
+        }
 
         public bool GetExcelData(bool hasTitle = true)
         {

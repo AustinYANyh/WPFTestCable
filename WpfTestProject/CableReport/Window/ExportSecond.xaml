@@ -51,7 +51,7 @@
                     <DataGridTemplateColumn Header="Excel列" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
-                                <ComboBox ItemsSource="{Binding ExcelColumns}" SelectedIndex="{Binding ExcelIndex,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding DisplayCol}"/>
+                                <ComboBox ItemsSource="{Binding ExcelColumns}" SelectedIndex="{Binding ExcelIndex,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding DisplayCol}" SelectionChanged="Selector_OnSelectionChanged"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>
