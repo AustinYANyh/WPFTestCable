@@ -7,7 +7,7 @@
         xmlns:cableReport="clr-namespace:WpfTestProject.CableReport"
         xmlns:userControl="clr-namespace:WpfTestProject.CableReport.UserControl"
         mc:Ignorable="d" Unloaded="ExportMain_OnUnloaded"
-        Title="电缆清册" Height="496" Width="1000" ResizeMode="CanResize" WindowStartupLocation="CenterScreen">
+        Title="电缆清册" Height="500" Width="1000" ResizeMode="CanResize" WindowStartupLocation="CenterScreen">
     <Window.Resources>
        <ResourceDictionary Source="../Style/ExportMainStyle.xaml"></ResourceDictionary>
     </Window.Resources>

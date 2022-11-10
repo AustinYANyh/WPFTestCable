@@ -59,7 +59,7 @@ namespace WpfTestProject.CableReport.Window
             {
                 if (dataGridColumn.Header is string headStr)
                 {
-                    infos.Add(new DataGridInfo(){TitleName = "起始行",IsNeedRedStar = false,ExcelIndex = 0,DataType = InfoType.None});
+                    infos.Add(new DataGridInfo(){TitleName = "起始行",IsNeedRedStar = false,ExcelIndex = 0,DataType = InfoType.StartReadFromThisNumber});
                 }
                 else if (dataGridColumn.Header is TextBox textBox)
                 {

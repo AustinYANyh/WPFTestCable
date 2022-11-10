@@ -17,7 +17,7 @@ namespace HW.JD.CableReport.Model
     public enum InfoType
     {
         None=0,
-        Number,
+        StartReadFromThisNumber,
         CableNumber,
         CableInfo,
         CableSize,
@@ -76,15 +76,13 @@ namespace HW.JD.CableReport.Model
                 OnPropertyChanged(nameof(ExcelIndex));
             }
         }
-
-        private string displayCol => ExcelColumns.ElementAt(ExcelIndex);
-
+        
         public string DisplayCol
         {
             get
             {
                 if (ExcelIndex == -1 && ExcelColumns.Count > 0) ExcelIndex = 0;
-                return ExcelColumns.ElementAt(ExcelIndex);
+                return ExcelColumns.Count > 0 ? ExcelColumns.ElementAt(ExcelIndex) : string.Empty;
             }
             set {  }
         }

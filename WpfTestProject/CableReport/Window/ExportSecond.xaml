@@ -8,7 +8,7 @@
         xmlns:cableReport="clr-namespace:HW.JD.CableReport"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance local:ExportSecond}"
-        Title="导入清册" Height="327" Width="602" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+        Title="导入清册" Height="450" Width="700" ResizeMode="CanResize" WindowStartupLocation="CenterOwner">
     <Window.Resources>
         <ResourceDictionary Source="../Style/ExportSecondStyle.xaml"></ResourceDictionary>
     </Window.Resources>
@@ -60,7 +60,7 @@
         </Grid>
         
         <Grid Row="2">
-            <CheckBox x:Name="AllCheckBox" Content="全选" VerticalAlignment="Center"></CheckBox>
+            <CheckBox x:Name="AllCheckBox" Width="50" Content="全选" HorizontalAlignment="Left" VerticalAlignment="Center"></CheckBox>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button x:Name="ExportToMainBtn" Width="100" Content="导入" Margin="0,0,50,0" Click="ExportToMainBtnOnClick"></Button>
                 <Button x:Name="CancelBtn" Width="100" Content="取消" Margin="0,0,50,0"></Button>

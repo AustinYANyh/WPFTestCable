@@ -30,12 +30,6 @@ namespace WpfTestProject.CableReport.Window
         {
             InitializeComponent();
 
-            SheetData = new ObservableCollection<SheetInfo>
-            {
-                new SheetInfo() {IsChecked = true, Content = "电力电缆表"},
-                new SheetInfo() {IsChecked = false, Content = "电缆标注"}
-            };
-
             DataGridData = new ObservableCollection<DataGridInfo>(infos);
             UpdateExcelColumnInDataGrid();
 
@@ -44,16 +38,23 @@ namespace WpfTestProject.CableReport.Window
 
         private void UpdateExcelColumnInDataGrid()
         {
-            foreach (DataGridInfo dataGridInfo in DataGridData)
+            StartColumns = new List<string>();
+            for (int i = 0; i < 20; i++)
             {
+                StartColumns.Add((i+1).ToString());
+            }
+            for (var i = 0; i < DataGridData.Count; i++)
+            {
+                var dataGridInfo = DataGridData[i];
                 dataGridInfo.ExcelIndex = 0;
                 dataGridInfo.ExcelColumns.Clear();
-                dataGridInfo.ExcelColumns.AddRange(ExcelHelper.GetColumnNames());
+
+                dataGridInfo.ExcelColumns.AddRange(i == 0 ? StartColumns : ExcelHelper.GetColumnNames());
                 dataGridInfo.UpdateDisPlayCol();
             }
         }
 
-        // private List<string> columns = new List<string>() {"A", "B", "C"};
+        private List<string> StartColumns = new List<string>();
 
         public ObservableCollection<SheetInfo> SheetData { get; set; } = new ObservableCollection<SheetInfo>();
         public ObservableCollection<DataGridInfo> DataGridData { get; set; } = new ObservableCollection<DataGridInfo>();
@@ -83,9 +84,7 @@ namespace WpfTestProject.CableReport.Window
             }
 
             ExportResult = new List<ExportDataGridInfo>();
-
-            //ToDo 起始行开始读取
-
+            
             foreach (SheetInfo sheetInfo in SheetData)
             {
                 if (!sheetInfo.IsChecked) continue;
@@ -103,12 +102,17 @@ namespace WpfTestProject.CableReport.Window
                         //按照选择的列读取
                         foreach (DataGridInfo dataGridInfo in DataGridData)
                         {
+                            //起始行开始读取
+                            if (dataGridInfo.DataType == InfoType.StartReadFromThisNumber)
+                            {
+                                if (i + 1 < Convert.ToInt32(dataGridInfo.DisplayCol)) break;
+                            }
                             //没有这一列
                             if (!data.ColumnNames.Contains(dataGridInfo.DisplayCol) || dataGridInfo.DataType == InfoType.None)
                             {
                                 continue;
                             }
-
+                            
                             string resultStr = Convert.ToString(dataDataRow[dataGridInfo.DisplayCol]);
 
                             //列数据有误
@@ -132,7 +136,6 @@ namespace WpfTestProject.CableReport.Window
                             if (dataGridInfo.DataType == InfoType.NewCol7) resultInfo.NewCol7 = resultStr;
                             if (dataGridInfo.DataType == InfoType.NewCol8) resultInfo.NewCol8 = resultStr;
                         }
-
                         ExportResult.Add(resultInfo);
                     }
                 }

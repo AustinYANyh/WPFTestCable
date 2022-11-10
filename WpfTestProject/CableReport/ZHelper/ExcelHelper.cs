@@ -25,7 +25,7 @@ namespace HW.JD.CableReport.ZHelper
 {
     public class ExcelHelper:NotifyBase
     {
-        private string filePath = "default";
+        private string filePath;
         public string FilePath
         {
             get => filePath;
@@ -36,7 +36,7 @@ namespace HW.JD.CableReport.ZHelper
             } 
         }
 
-        private List<string> ColumnNames = new List<string>() {"default"};
+        private List<string> ColumnNames = new List<string>();
         private List<string> workSheetNames { get; set; } = new List<string>();
 
         public List<string> GetColumnNames() => ColumnNames;
