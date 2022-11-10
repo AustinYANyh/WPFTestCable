@@ -26,7 +26,6 @@ namespace WpfTestProject.CableReport.Window
 {
     public partial class ExportSecond : System.Windows.Window
     {
-        private bool enableCheckEmpty = false;
         public ExcelHelper ExcelHelper { get; set; }= new ExcelHelper();
         public ExportSecond(List<DataGridInfo> infos)
         {
@@ -40,7 +39,6 @@ namespace WpfTestProject.CableReport.Window
 
         private void UpdateExcelColumnInDataGrid()
         {
-            enableCheckEmpty = false;
             StartColumns = new List<string>();
             for (int i = 0; i < ExcelHelper.GetExcelRowsCount(); i++)
             {
@@ -54,7 +52,6 @@ namespace WpfTestProject.CableReport.Window
                 dataGridInfo.ExcelColumns.AddRange(i == 0 ? StartColumns : ExcelHelper.GetColumnNames(dataGridInfo.IsNeedRedStar));
                 dataGridInfo.UpdateDisPlayCol();
             }
-            enableCheckEmpty = true;
         }
 
         private List<string> StartColumns = new List<string>();
@@ -152,17 +149,6 @@ namespace WpfTestProject.CableReport.Window
                 }
             }
             this.Close();
-        }
-
-        private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (sender is ComboBox comboBox && comboBox.DataContext is DataGridInfo dataContext && enableCheckEmpty)
-            {
-                if (dataContext.IsNeedRedStar && dataContext.DisplayCol.Equals(String.Empty))
-                {
-                    MessageBox.Show("带*号标题内容不允许为空！");
-                }
-            }
         }
     }
 }
