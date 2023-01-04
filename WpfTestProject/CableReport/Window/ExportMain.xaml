@@ -4,7 +4,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:HW.JD.CableReport"
-        xmlns:cableReport="clr-namespace:WpfTestProject.CableReport"
         xmlns:userControl="clr-namespace:WpfTestProject.CableReport.UserControl"
         mc:Ignorable="d" Unloaded="ExportMain_OnUnloaded"
         Title="电缆清册" Height="500" Width="1000" ResizeMode="CanResize" WindowStartupLocation="CenterScreen">
@@ -23,8 +22,8 @@
         </Grid>
         <Grid Grid.Row="1">
             <DataGrid x:Name="ExportResultDataGrid" CanUserAddRows="False" CanUserSortColumns="False" AutoGenerateColumns="False" ItemsSource="{Binding DataInfos}" HorizontalScrollBarVisibility="Auto" 
-                      PreviewMouseLeftButtonDown="ExportResultDataGrid_OnPreviewMouseLeftButtonDown"
-                      PreviewMouseRightButtonDown="ExportResultDataGrid_OnPreviewMouseRightButtonDown">
+                      PreviewMouseLeftButtonDown="ExportResultDataGrid_OnPreviewMouseLeftButtonDown" LoadingRow="ExportResultDataGrid_OnLoadingRow" UnloadingRow="ExportResultDataGrid_OnUnloadingRow"
+                      PreviewMouseRightButtonDown="ExportResultDataGrid_OnPreviewMouseRightButtonDown" Background="Transparent">
                 <DataGrid.Columns>
                      <DataGridTextColumn x:Name="NumberColumn" Header="序号" Width="*" Binding="{Binding Number,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"></DataGridTextColumn>
                      <DataGridTextColumn x:Name="OrderColumn" Width="*" Binding="{Binding CableNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"> 

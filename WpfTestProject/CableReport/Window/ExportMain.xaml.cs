@@ -11,12 +11,14 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using HW.JD.CableReport;
 using HW.JD.CableReport.Model;
 using HW.JD.CableReport.ZHelper;
@@ -34,12 +36,28 @@ namespace WpfTestProject.CableReport.Window
         private readonly Action<int> AddRowToDataGridAction;
         private readonly Action<int> RemoveRowFromDataGridAction;
 
+        private bool IsLoaded = false;
+
         public ExportMain()
         {
             InitializeComponent();
 
             AddRowToDataGridAction = new Action<int>(AddRowToDataGrid);
             RemoveRowFromDataGridAction = new Action<int>(RemoveRowFromDataGrid);
+
+
+            DataInfos = new ObservableCollection<ExportDataGridInfo>()
+            {
+                new ExportDataGridInfo(){ Number = "1",CableInfo = "2",CableNumber = "3",CableSize = "4"},
+                new ExportDataGridInfo(){ Number = "2",CableInfo = "2",CableNumber = "3",CableSize = "4"},
+                new ExportDataGridInfo(){ Number = "3",CableInfo = "2",CableNumber = "3",CableSize = "4"},
+                new ExportDataGridInfo(){ Number = "4",CableInfo = "2",CableNumber = "3",CableSize = "4"},
+                new ExportDataGridInfo(){ Number = "5",CableInfo = "2",CableNumber = "3",CableSize = "4"},
+                new ExportDataGridInfo(){ Number = "6",CableInfo = "2",CableNumber = "3",CableSize = "4"},
+                new ExportDataGridInfo(){ Number = "7",CableInfo = "2",CableNumber = "3",CableSize = "4"},
+                new ExportDataGridInfo(){ Number = "8",CableInfo = "2",CableNumber = "3",CableSize = "4"},
+                new ExportDataGridInfo(){ Number = "9",CableInfo = "2",CableNumber = "3",CableSize = "4"},
+            };
 
             this.DataContext = this;
         }
@@ -59,7 +77,7 @@ namespace WpfTestProject.CableReport.Window
             {
                 if (dataGridColumn.Header is string headStr)
                 {
-                    infos.Add(new DataGridInfo(){TitleName = "起始行",IsNeedRedStar = false,ExcelIndex = 0,DataType = InfoType.StartReadFromThisNumber});
+                    infos.Add(new DataGridInfo() { TitleName = "起始行", IsNeedRedStar = false, ExcelIndex = 0, DataType = InfoType.StartReadFromThisNumber});
                 }
                 else if (dataGridColumn.Header is TextBox textBox)
                 {
@@ -121,6 +139,7 @@ namespace WpfTestProject.CableReport.Window
                 foreach (Button btn in ((ListBox)rowPopup.Child).Items)
                 {
                     if (btn is RowAddButton rowAddBtn) rowAddBtn.RowIndex = index;
+
                     if (btn is RowDelButton rowDelBtn) rowDelBtn.RowIndex = index;
                 }
                 SetPopupIsOpen(rowPopup, true);
@@ -135,7 +154,7 @@ namespace WpfTestProject.CableReport.Window
 
         private void AddRowToDataGrid(int index)
         {
-            DataInfos.Insert(index+1,new ExportDataGridInfo());
+            DataInfos.Insert(index + 1, new ExportDataGridInfo() { IsAddRow = true });
             UpdateDataInfoNumber();
             SetPopupIsOpen(rowPopup, false);
         }
@@ -186,6 +205,26 @@ namespace WpfTestProject.CableReport.Window
             {
                 headerPopup.IsOpen = false;
                 headerPopup = null;
+            }
+        }
+
+        private void ExportResultDataGrid_OnLoadingRow(object sender, DataGridRowEventArgs e)
+        {
+            if (e.Row.DataContext is ExportDataGridInfo info)
+            {
+                if (info.IsAddRow)
+                {
+                    info.IsAddRow = false;
+                    e.Row.BeginStoryboard(FindResource("AddStoryBoard") as Storyboard);
+                }
+            }
+        }
+
+        private void ExportResultDataGrid_OnUnloadingRow(object sender, DataGridRowEventArgs e)
+        {
+            if (e.Row.DataContext is ExportDataGridInfo info)
+            {
+              
             }
         }
     }

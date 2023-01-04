@@ -39,22 +39,22 @@ namespace WpfTestProject.CableReport.Window
 
         private void UpdateExcelColumnInDataGrid()
         {
-            StartColumns = new List<string>();
+            startColumns = new List<string>();
             for (int i = 0; i < ExcelHelper.GetExcelRowsCount(); i++)
             {
-                StartColumns.Add((i+1).ToString());
+                startColumns.Add((i+1).ToString());
             }
             for (var i = 0; i < DataGridData.Count; i++)
             {
                 var dataGridInfo = DataGridData[i];
                 dataGridInfo.ExcelIndex = 0;
                 dataGridInfo.ExcelColumns.Clear();
-                dataGridInfo.ExcelColumns.AddRange(i == 0 ? StartColumns : ExcelHelper.GetColumnNames(dataGridInfo.IsNeedRedStar));
+                dataGridInfo.ExcelColumns.AddRange(i == 0 ? startColumns : ExcelHelper.GetColumnNames(dataGridInfo.IsNeedRedStar));
                 dataGridInfo.UpdateDisPlayCol();
             }
         }
 
-        private List<string> StartColumns = new List<string>();
+        private List<string> startColumns = new List<string>();
 
         public ObservableCollection<SheetInfo> SheetData { get; set; } = new ObservableCollection<SheetInfo>();
         public ObservableCollection<DataGridInfo> DataGridData { get; set; } = new ObservableCollection<DataGridInfo>();

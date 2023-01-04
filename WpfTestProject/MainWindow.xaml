@@ -4,9 +4,29 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfTestProject"
+        xmlns:wpfone="clr-namespace:wpfone"
+        d:DataContext="{d:DesignInstance wpfone:DiyListViewItem}"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid>
-        <Button x:Name="Button" Content="WpfTestProject" Width="150" Height="50" Command="{Binding DoWork}"></Button>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <StackPanel Orientation="Horizontal" Height="50">
+            <Button x:Name="AddRowBtn" Content="增加行数据" Margin="0,0,15,0" Click="AddRowBtn_OnClick"></Button>
+            <Button x:Name="DelRowBtn" Content="增加列数据" Margin="0,0,15,0" Click="DelRowBtn_OnClick"></Button>
+        </StackPanel>
+        
+        <ListView x:Name="ListViewTest" Grid.Row="1" ItemsSource="{Binding Items}">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <wpfone:DiyListViewItem Content="{Binding}" PreviewMouseLeftButtonDown="DiyListViewItem_PreviewMouseLeftButtonDown">
+        
+                    </wpfone:DiyListViewItem>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </Grid>
 </Window>

@@ -30,4 +30,8 @@
         <Setter Property="BorderBrush" Value="Transparent"></Setter>
         <Setter Property="BorderThickness" Value="0"></Setter>
     </Style>
+
+    <Storyboard x:Key="AddStoryBoard">
+        <ColorAnimation Storyboard.TargetProperty="(DataGridRow.Background).(SolidColorBrush.Color)" Duration="00:00:01" From="Red"/>
+    </Storyboard>
 </ResourceDictionary>

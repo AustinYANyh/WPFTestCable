@@ -12,6 +12,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
+using System.Windows.Media.Animation;
 using WpfTestProject.CableReport.UserControl;
 
 namespace HW.JD.CableReport.ZHelper

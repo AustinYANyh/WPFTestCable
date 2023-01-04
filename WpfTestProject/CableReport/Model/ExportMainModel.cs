@@ -14,6 +14,8 @@ namespace HW.JD.CableReport.Model
 {
     public class ExportDataGridInfo : NotifyBase
     {
+        public bool IsAddRow { get; set; } = false;
+
         private string number;
         private string cableNumber;
         private string cableInfo;
